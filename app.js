@@ -95,6 +95,7 @@
   document.addEventListener('click', (e) => {
     const t = e.target.closest('[data-open]');
     if (!t || t.matches('[data-thing]')) return;
+    if (t.tagName === 'A' && file.showModal) e.preventDefault();
     openFile(t.dataset.open, t);
   });
 

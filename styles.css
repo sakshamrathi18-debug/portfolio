@@ -422,6 +422,7 @@ html:not(.js) [data-stamp] { display: none; }
 .file__facts dd { margin: var(--space-xs) 0 0; }
 .file__shot, .file__pair figure { margin: 0; width: 100%; }
 .file__shot img, .file__pair img { width: 100%; height: auto; border: var(--edge); border-radius: var(--r); }
+.file__shot--page img { background: var(--card); }
 .file__pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: var(--space-lg); width: 100%; align-items: start; }
 .file__pair img { border: 0; }
 .file__pair figcaption { margin-top: var(--space-xs); font-size: var(--text-sm); font-weight: 600; }
