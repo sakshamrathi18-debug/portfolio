@@ -1,0 +1,2 @@
+- okcredit-udhar-bahi-khata-ios-*: App Store, "OkCredit - Udhar Bahi Khata" by Aditya Prasad · listing updated 2026-10-15 · https://apps.apple.com/in/app/okcredit-udhar-bahi-khata/id1488748286
+- goodspace-job-search-and-hire-ios-*: App Store, "GoodSpace: Job Search and Hire" by eSocial · listing updated 2026-10-28 · https://apps.apple.com/in/app/goodspace-job-search-and-hire/id1495314369
