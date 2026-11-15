@@ -2,3 +2,7 @@
 .hallmark/
 .DS_Store
 .vercel
+.v2/
+index.new.html
+styles.new.css
+build_v3.py

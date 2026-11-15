@@ -6,7 +6,7 @@
   const wide = () => matchMedia('(min-width: 60rem)').matches;
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const MAIL = 'sakshamrathi4@gmail.com';
-  const NAV = 64;
+  const NAV = 40;
 
   /* ================= spike chart (real data from Spike Book) ================= */
   let spikeData;
@@ -72,11 +72,13 @@
   $$('[data-spikes="mini"]').forEach((s) => drawSpikes(s).catch(() => {}));
 
   /* ================= files that open ================= */
+  let wakeFile = () => {};
   const file = $('#file'), fileBody = $('[data-file]', file);
   const openFile = (id, from) => {
     const tpl = $('#f-' + id);
     if (!tpl || !file.showModal) return;
     fileBody.replaceChildren(tpl.content.cloneNode(true));
+    wakeFile(fileBody);
     const chart = $('[data-spikes="full"]', fileBody);
     if (chart) drawSpikes(chart).catch(() => {});
     file.showModal();
@@ -92,6 +94,59 @@
   file.addEventListener('click', (e) => {
     if (e.target === file || e.target.closest('[data-close]')) file.close();
   });
+  file.addEventListener('close', () => file.classList.remove('is-full'));
+
+  /* ================= red, yellow, green: the window buttons work ================= */
+  const trashN = $('[data-trash-n]');
+  const pop = (el, from) => { if (!still) el.animate([{ scale: from, opacity: 0.3 }, { scale: 1, opacity: 1 }], { duration: 260, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }); };
+  const syncTrash = () => {
+    const n = $$('.win.is-closed').length;
+    if (trashN) { trashN.textContent = n; trashN.hidden = !n; }
+    onScroll();
+  };
+  const closeWin = (win) => {
+    const name = ($('.win__bar > span', win) || $('.cap', win) || {}).textContent || 'this window';
+    win.classList.remove('is-shade', 'is-zoom');
+    win.classList.add('is-closed');
+    const r = document.createElement('span');
+    r.className = 'win__reopen';
+    r.append(name.trim() + ' is closed. ');
+    const b = document.createElement('b'); b.textContent = 'reopen'; r.append(b);
+    win.append(r);
+    pop(win, 0.7);
+    syncTrash();
+  };
+  const reopenWin = (win) => {
+    win.classList.remove('is-closed');
+    $('.win__reopen', win)?.remove();
+    pop(win, 0.85);
+    syncTrash();
+  };
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest) return;
+    const closed = e.target.closest('.win.is-closed');
+    if (closed) { e.preventDefault(); e.stopPropagation(); if (!(closed._s && closed._s.moved >= 6)) reopenWin(closed); return; }
+    const light = e.target.closest('.win__bar > i');
+    if (!light || light.closest('.plate')) return;
+    e.preventDefault(); e.stopPropagation();
+    const bar = light.parentElement, n = [...bar.children].indexOf(light);
+    if (bar.closest('.file')) { if (n < 2) file.close(); else file.classList.toggle('is-full'); return; }
+    const win = bar.closest('.win');
+    if (!win || (win._s && win._s.moved >= 6)) return;
+    if (n === 0) closeWin(win);
+    else if (n === 1) { win.classList.remove('is-zoom'); win.classList.toggle('is-shade'); }
+    else {
+      const opens = win.dataset.open ? [win] : $$('[data-open]', win);
+      if (opens.length === 1) openFile(opens[0].dataset.open, win);
+      else { win.classList.remove('is-shade'); win.classList.toggle('is-zoom'); }
+    }
+  }, true);
+  $('[data-trash]')?.addEventListener('click', (e) => {
+    const all = $$('.win.is-closed');
+    if (all.length) all.forEach(reopenWin);
+    else if (!still) e.currentTarget.animate([{ translate: '0 0' }, { translate: '-4px 0' }, { translate: '4px 0' }, { translate: '0 0' }], { duration: 240 });
+  });
+
   document.addEventListener('click', (e) => {
     const t = e.target.closest('[data-open]');
     if (!t || t.matches('[data-thing]')) return;
@@ -105,7 +160,7 @@
   if (stage) {
     const tilt = $('[data-tilt]', stage);
     let top = 20;
-    if (!fine) { const hint = $('[data-hint]', stage); if (hint) hint.textContent = 'Tap a card to open it.'; }
+    if (!fine) { const hint = $('[data-hint]', stage); if (hint) hint.textContent = 'tap a window to open it.'; }
     requestAnimationFrame(() => {
       stage.classList.add('is-dealing', 'is-dealt');
       setTimeout(() => stage.classList.remove('is-dealing'), 1300);
@@ -119,6 +174,25 @@
       s.x = clamp(s.x, minX, maxX); s.y = clamp(s.y, minY, maxY);
       el.style.setProperty('--x', s.x + 'px');
       el.style.setProperty('--y', s.y + 'px');
+    };
+    const FACES = ['^ ω ^', '(•‿•)', 'ʕ•ᴥ•ʔ', '(ง •̀_•́)ง', '¯\\_(ツ)_/¯', '(¬_¬)', '(╯°□°)╯︵ ┻━┻', '┬─┬ノ( º _ ºノ)', '(づ｡◕‿‿◕｡)づ', '( ˘▽˘)っ♨'];
+    const TAGS = {
+      blue: [['my name is', 'saksham'], ['i study at', 'ubs, pu'], ['i build with', 'claude code'], ['i write on', 'linkedin']],
+      red: [['i am open to', 'internships'], ['i like', 'product'], ['and also', 'marketing']],
+    };
+    const toy = (el) => {
+      if (el.classList.contains('kao')) {
+        let f; do { f = FACES[Math.floor(Math.random() * FACES.length)]; } while (f === el.textContent);
+        el.textContent = f;
+        if (!still) el.animate([{ translate: '0 0' }, { translate: '0 -14px' }, { translate: '0 0' }], { duration: 320, easing: 'cubic-bezier(0.3, 0, 0.3, 1)' });
+      } else if (el.classList.contains('sticker')) {
+        const set = TAGS[el.classList.contains('sticker--red') ? 'red' : 'blue'];
+        el._n = ((el._n || 0) + 1) % set.length;
+        const swap = () => { $('small', el).textContent = set[el._n][0]; $('b', el).textContent = set[el._n][1]; };
+        if (still) { swap(); return; }
+        el.animate([{ scale: '1 1' }, { scale: '0 1' }, { scale: '1 1' }], { duration: 300, easing: 'ease-in-out' });
+        setTimeout(swap, 150);
+      }
     };
     things.forEach((el) => {
       const s = { x: 0, y: 0, vx: 0, vy: 0, id: null, px: 0, py: 0, raf: 0, moved: 0 };
@@ -168,7 +242,7 @@
       };
       el.addEventListener('pointerup', drop);
       el.addEventListener('pointercancel', drop);
-      el.addEventListener('click', () => { if (s.moved < 6 && el.dataset.open) openFile(el.dataset.open, el); });
+      el.addEventListener('click', (e) => { if (s.moved >= 6) { e.preventDefault(); return; } toy(el); if (el.dataset.open) { if (el.tagName === 'A' && file.showModal) e.preventDefault(); openFile(el.dataset.open, el); } });
       el.addEventListener('keydown', (e) => {
         const k = { ArrowLeft: [-16, 0], ArrowRight: [16, 0], ArrowUp: [0, -16], ArrowDown: [0, 16] }[e.key];
         if (!k) return;
@@ -184,20 +258,62 @@
       el.style.setProperty('--x', '0px'); el.style.setProperty('--y', '0px');
       el.style.zIndex = '';
     }));
+    const hero = stage.closest('.hero');
     if (fine && !still) {
-      const hero = stage.closest('.hero');
-      let frame = 0;
+      let frame = 0, ev = null, hot = null;
+      const free = (el) => el && el._s.id === null && !el.classList.contains('is-glide');
+      const calm = (el) => { if (free(el)) { el.style.setProperty('--tx', '0deg'); el.style.setProperty('--ty', '0deg'); } };
       hero.addEventListener('pointermove', (e) => {
+        ev = e;
         if (frame) return;
         frame = requestAnimationFrame(() => {
           frame = 0;
-          const r = hero.getBoundingClientRect();
-          tilt.style.setProperty('--sy', (((e.clientX - r.left) / r.width - 0.5) * 12).toFixed(2) + 'deg');
-          tilt.style.setProperty('--sx', (-((e.clientY - r.top) / r.height - 0.5) * 9).toFixed(2) + 'deg');
+          const r = stage.getBoundingClientRect();
+          tilt.style.setProperty('--mx', clamp(((ev.clientX - r.left) / r.width - 0.5) * 2, -1, 1).toFixed(3));
+          tilt.style.setProperty('--my', clamp(((ev.clientY - r.top) / r.height - 0.5) * 2, -1, 1).toFixed(3));
+          const el = ev.target.closest ? ev.target.closest('[data-thing]') : null;
+          if (hot && hot !== el) calm(hot);
+          hot = el;
+          if (free(el)) {
+            const b = el.getBoundingClientRect();
+            el.style.setProperty('--ty', (((ev.clientX - b.left) / b.width - 0.5) * 16).toFixed(1) + 'deg');
+            el.style.setProperty('--tx', (-((ev.clientY - b.top) / b.height - 0.5) * 16).toFixed(1) + 'deg');
+          }
         });
       });
-      hero.addEventListener('pointerleave', () => { tilt.style.setProperty('--sy', '0deg'); tilt.style.setProperty('--sx', '0deg'); });
+      hero.addEventListener('pointerleave', () => { calm(hot); hot = null; tilt.style.setProperty('--mx', 0); tilt.style.setProperty('--my', 0); });
+
+      /* a second cursor that wanders the desk and points at things */
+      const buddy = $('[data-buddy]', stage);
+      if (buddy && wide()) {
+        const SAY = { desk: 'built this for my desk', kanban: 'my mac app', covers: 'i design these', spike: '300 foods, checked by hand', golden: '₹30 Cr disbursed', okcredit: '5x in four months', goodspace: '50+ early users', ubs: 'mba, class of 2028', resume: 'one page' };
+        const tag = $('b', buddy);
+        let last = null;
+        const go = () => {
+          if (document.hidden || stage.getBoundingClientRect().bottom < 240 || things.some((t) => t._s.id !== null)) return;
+          const pool = things.filter((t) => t.dataset.open && t !== last && !t.classList.contains('is-closed'));
+          if (!pool.length) return;
+          const el = last = pool[Math.floor(Math.random() * pool.length)];
+          const b = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
+          buddy.style.setProperty('--bx', (b.left - s.left + b.width * 0.55).toFixed(0) + 'px');
+          buddy.style.setProperty('--by', (b.top - s.top + b.height * 0.5).toFixed(0) + 'px');
+          buddy.classList.add('is-on');
+          tag.textContent = 'saksham';
+          setTimeout(() => { tag.textContent = SAY[el.dataset.open] || 'saksham'; el.classList.add('is-poked'); }, 1300);
+          setTimeout(() => el.classList.remove('is-poked'), 3100);
+        };
+        setTimeout(go, 2200);
+        setInterval(go, 4600);
+      }
     }
+    const wallBtns = $$('[data-wall] button', hero);
+    const setWall = (w) => {
+      if (w === 'dots') hero.removeAttribute('data-wall'); else hero.dataset.wall = w;
+      wallBtns.forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === w));
+      try { localStorage.setItem('wall', w); } catch (err) { /* private window */ }
+    };
+    wallBtns.forEach((b) => b.addEventListener('click', () => setWall(b.dataset.w)));
+    try { const w = localStorage.getItem('wall'); if (w && wallBtns.some((b) => b.dataset.w === w)) setWall(w); } catch (err) { /* private window */ }
   }
 
   /* ================= the loan flow, driven by scroll ================= */
@@ -234,12 +350,19 @@
   }
 
   /* ================= one scroll loop: progress, parallax, ticker, banner drift ================= */
+  const dock = $('[data-dock]'), foot = $('.foot');
   const bar = $('[data-progress]'), pars = $$('[data-par]'), ticker = $('[data-ticker]'), run = ticker && $('.ticker__run', ticker);
   let lastY = scrollY, tx = 0, dir = -1, vel = 0;
   const onScroll = () => {
     const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
     bar?.style.setProperty('--p', (max > 0 ? y / max : 0).toFixed(4));
     flowTick();
+    if (dock) {
+      const fr = flow && flow.classList.contains('is-pinned') ? flow.getBoundingClientRect() : null;
+      const inFlow = fr && fr.top <= NAV + 1 && fr.bottom >= innerHeight - 1;
+      const atEnd = foot && foot.getBoundingClientRect().top < innerHeight - 80;
+      dock.classList.toggle('is-up', (y > innerHeight * 0.45 || !!$('.win.is-closed')) && !inFlow && !atEnd);
+    }
     if (still) return;
     pars.forEach((el) => {
       const r = el.parentElement.getBoundingClientRect();
@@ -279,6 +402,45 @@
   };
   const navLinks = $$('.slab__nav a');
   spy(navLinks, navLinks.map((a) => $(a.getAttribute('href'))));
+  if (dock) {
+    const items = $$('.macdock__item', dock), dockLinks = items.filter((a) => (a.getAttribute('href') || '').startsWith('#'));
+    spy(dockLinks, dockLinks.map((a) => $(a.getAttribute('href'))));
+    if (fine && !still) {
+      dock.addEventListener('pointermove', (e) => items.forEach((it) => {
+        const r = it.getBoundingClientRect(), d = Math.abs(e.clientX - (r.left + r.width / 2));
+        it.style.setProperty('--m', (1 + 0.5 * Math.max(0, 1 - d / 120)).toFixed(3));
+      }));
+      dock.addEventListener('pointerleave', () => items.forEach((it) => it.style.removeProperty('--m')));
+    }
+  }
+
+  /* ================= numbers that count up, widgets that fill in ================= */
+  const fillBoxes = (root) => $$('[data-fill]', root).forEach((box) => { if (box.children.length) return; for (let n = 0; n < +box.dataset.fill; n++) { const i = document.createElement('i'); i.style.setProperty('--n', n); box.append(i); } });
+  fillBoxes(document);
+  const live = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('is-live'); live.unobserve(e.target); } }), { threshold: 0.4 });
+  $$('[data-live]').forEach((el) => live.observe(el));
+  const ups = $$('[data-up]');
+  const showUp = (el, v) => { el.textContent = (el.dataset.pre || '') + Math.round(v).toLocaleString('en-IN') + (el.dataset.suf || ''); };
+  const countUp = (el) => {
+    const to = +el.dataset.up, t0 = performance.now();
+    const step = (t) => { const k = clamp((t - t0) / 1400, 0, 1); showUp(el, to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  wakeFile = (root) => {
+    fillBoxes(root);
+    const tiles = $$('.wdg', root), nums = $$('[data-up]', root);
+    if (still) { tiles.forEach((t) => t.classList.add('is-live')); return; }
+    nums.forEach((el) => showUp(el, 0));
+    setTimeout(() => { tiles.forEach((t) => t.classList.add('is-live')); nums.forEach(countUp); }, 380);
+  };
+  if (!still) {
+    const uo = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      uo.unobserve(e.target);
+      countUp(e.target);
+    }), { threshold: 0.6 });
+    ups.forEach((el) => { showUp(el, 0); uo.observe(el); });
+  }
 
   /* ================= OkCredit: count from ₹75L to ₹3.75 Cr ================= */
   const okc = $('[data-okc]');
@@ -298,7 +460,7 @@
         if (k < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
-    }), { threshold: 0.45 }).observe(okc);
+    }), { threshold: 0.6 }).observe($('.okc__fig', okc));
   }
 
   /* ================= marketing: reach per LinkedIn post (his own analytics, 13 Nov 2026) ================= */
@@ -332,15 +494,17 @@
       const rows = posts.filter((p) => f === 'all' || p[2] === f), shown = all ? rows : rows.slice(0, 6);
       list.replaceChildren(...shown.map((p, n) => {
         const li = document.createElement('li');
-        li.innerHTML = '<span class="reach__hook"></span><span class="reach__bar"><i></i></span><b class="fig"></b>';
-        li.children[0].textContent = p[0];
-        li.querySelector('i').style.setProperty('--w', (p[1] / posts[0][1]).toFixed(3));
-        li.querySelector('i').style.setProperty('--n', n);
-        li.children[2].textContent = p[1].toLocaleString('en-IN');
+        li.className = 'win';
+        li.style.setProperty('--rot', [-1.2, 0.8, -0.5, 1.1, -0.9, 0.6][n % 6] + 'deg');
+        li.innerHTML = '<span class="win__bar"><i></i><i></i><i></i><span>no. ' + (posts.indexOf(p) + 1) + ' of ' + posts.length + '</span><b>x</b></span><span class="reach__hook"></span><span class="reach__bar"><i></i></span><b class="fig"></b>';
+        li.children[1].textContent = p[0];
+        li.querySelector('.reach__bar i').style.setProperty('--w', (p[1] / posts[0][1]).toFixed(3));
+        li.querySelector('.reach__bar i').style.setProperty('--n', n);
+        li.children[3].textContent = p[1].toLocaleString('en-IN') + ' views';
         return li;
       }));
       more.hidden = rows.length <= 6;
-      more.textContent = all ? 'Show fewer' : 'Show all ' + rows.length;
+      more.textContent = all ? 'show fewer' : 'show all ' + rows.length;
       if (list.classList.contains('is-in')) { list.classList.remove('is-in'); requestAnimationFrame(() => requestAnimationFrame(() => list.classList.add('is-in'))); }
     };
     filters.forEach((b) => b.addEventListener('click', () => { f = b.dataset.f; all = false; filters.forEach((x) => x.setAttribute('aria-pressed', x === b)); draw(); }));
@@ -474,6 +638,61 @@
     });
     deal();
   }
+
+
+  /* ================= menu bar clock, folder letters, folder stacks ================= */
+  const clock = $('[data-clock]');
+  if (clock) {
+    const tick = () => { clock.textContent = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }); };
+    tick(); setInterval(tick, 20000);
+  }
+  const GLYPHS = {
+    s: ['.####', '#....', '#....', '.###.', '....#', '....#', '####.'],
+    a: ['.###.', '#...#', '#...#', '#####', '#...#', '#...#', '#...#'],
+    k: ['#...#', '#..#.', '#.#..', '##...', '#.#..', '#..#.', '#...#'],
+    h: ['#...#', '#...#', '#...#', '#####', '#...#', '#...#', '#...#'],
+    m: ['#...#', '##.##', '#.#.#', '#.#.#', '#...#', '#...#', '#...#'],
+  };
+  $$('[data-pixels]').forEach((box) => {
+    const word = [...box.dataset.pixels].filter((c) => GLYPHS[c]);
+    box.style.setProperty('--cols', word.length * 6 - 1);
+    let n = 0;
+    for (let row = 0; row < 7; row++) word.forEach((c, wi) => {
+      [...GLYPHS[c][row]].forEach((bit) => { const i = document.createElement('i'); if (bit === '#') { i.className = 'on'; i.style.setProperty('--n', n++); } box.append(i); });
+      if (wi < word.length - 1) box.append(document.createElement('i'));
+    });
+    new IntersectionObserver((es, o) => es.forEach((e) => { if (e.isIntersecting) { box.classList.add('is-in'); o.disconnect(); } }), { threshold: 0.3 }).observe(box);
+  });
+  $$('.folderstack').forEach((st, side) => {
+    for (let k = 0; k < 8; k++) [0, 1].forEach((arm) => {
+      const f = document.createElement('i');
+      f.style.left = (arm ? 10.6 - k * 0.72 : k * 0.72) + 'em';
+      f.style.top = k * 2.9 + 'em';
+      const hue = side ? 70 + arm * 40 + k * 4 : 280 + arm * 40 + k * 5;
+      f.style.background = 'linear-gradient(hsl(' + hue + ' 90% 80%), hsl(' + hue + ' 85% 66%))';
+      st.append(f);
+    });
+  });
+
+  /* ================= teardown: the bill, block by block ================= */
+  $$('[data-bill]').forEach((bill) => {
+    const panel = bill.closest('.tear__panel'), tip = $('[data-bill-tip]', bill), base = tip.textContent;
+    const SAY = {
+      milk: 'the milk itself: ₹17 on blinkit, ₹33 on amazon now.',
+      delivery: 'delivery: ₹35 on blinkit, ₹30 on amazon now.',
+      handling: 'handling: ₹12 on blinkit, waived on amazon now.',
+      cart: 'small cart fee: ₹20 on blinkit, none on amazon now.',
+    };
+    const mark = (k) => {
+      $$('[data-k]', panel).forEach((x) => x.classList.toggle('is-on', !!k && x.dataset.k === k));
+      bill.classList.toggle('is-dim', !!k);
+      tip.textContent = k ? SAY[k] : base;
+    };
+    panel.addEventListener('pointerover', (e) => { const t = e.target.closest('[data-k]'); if (t) mark(t.dataset.k); });
+    panel.addEventListener('pointerout', (e) => { if (!(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-k]'))) mark(); });
+    panel.addEventListener('click', (e) => { const t = e.target.closest('[data-k]'); if (t) mark(t.dataset.k); });
+    $('[data-bill-again]', bill)?.addEventListener('click', () => { bill.classList.remove('is-live'); void bill.offsetWidth; requestAnimationFrame(() => bill.classList.add('is-live')); });
+  });
 
   /* ================= teardown tabs ================= */
   $$('[data-switch]').forEach((sw) => {
