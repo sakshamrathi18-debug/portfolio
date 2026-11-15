@@ -177,7 +177,7 @@
     };
     const FACES = ['^ ω ^', '(•‿•)', 'ʕ•ᴥ•ʔ', '(ง •̀_•́)ง', '¯\\_(ツ)_/¯', '(¬_¬)', '(╯°□°)╯︵ ┻━┻', '┬─┬ノ( º _ ºノ)', '(づ｡◕‿‿◕｡)づ', '( ˘▽˘)っ♨'];
     const TAGS = {
-      blue: [['my name is', 'saksham'], ['i study at', 'ubs, pu'], ['i build with', 'claude code'], ['i write on', 'linkedin']],
+      blue: [['my name is', 'saksham'], ['i study at', 'ubs, pu']],
       red: [['i am open to', 'internships'], ['i like', 'product'], ['and also', 'marketing']],
     };
     const toy = (el) => {
@@ -322,7 +322,17 @@
   if (flow) {
     const panels = $$('.flow__panels > li', flow), lines = $$('.flow__lines li', flow);
     const desk = $('.flow__desk', flow), sheet = $('[data-sheet]', flow), rail = $('.rail', flow), stops = $$('.rail button', flow);
-    const pinned = () => wide() && !still && innerHeight >= 620;
+    const pinned = () => wide() && !still && innerHeight >= 440;
+    const fitBox = $('.flow__in', flow), pin = $('.flow__pin', flow);
+    /* shrink the pinned slide to whatever height the screen has, so the progress bar is never cut off */
+    const fit = () => {
+      fitBox.style.zoom = '';
+      if (!flow.classList.contains('is-pinned')) return;
+      const avail = innerHeight - NAV - 28, need = fitBox.getBoundingClientRect().height;
+      if (need > avail) fitBox.style.zoom = Math.max(0.5, avail / need).toFixed(3);
+    };
+    addEventListener('resize', () => { requestAnimationFrame(fit); });
+    addEventListener('load', fit);
     const span = () => flow.offsetHeight - (innerHeight - NAV);
     let last = -1;
     const draw = (s, p) => {
@@ -338,7 +348,9 @@
     };
     flowTick = () => {
       const on = pinned();
+      const was = flow.classList.contains('is-pinned');
       flow.classList.toggle('is-pinned', on);
+      if (on !== was) fit();
       if (!on) { last = -1; sheet.style.removeProperty('--p'); return; }
       const p = clamp((NAV - flow.getBoundingClientRect().top) / span(), 0, 1);
       draw(Math.min(5, Math.floor(p * 6)), p);
@@ -359,7 +371,7 @@
     flowTick();
     if (dock) {
       const fr = flow && flow.classList.contains('is-pinned') ? flow.getBoundingClientRect() : null;
-      const inFlow = fr && fr.top <= NAV + 1 && fr.bottom >= innerHeight - 1;
+      const inFlow = fr && fr.top <= NAV + 1 && fr.bottom >= NAV + 160;
       const atEnd = foot && foot.getBoundingClientRect().top < innerHeight - 80;
       dock.classList.toggle('is-up', (y > innerHeight * 0.45 || !!$('.win.is-closed')) && !inFlow && !atEnd);
     }
@@ -516,18 +528,43 @@
   const kan = $('[data-kan]');
   let approved = false;
   const asked = () => (kan ? $$('[data-col="ask"] .kcard', kan).map((c) => c.dataset.card) : []);
-  let toastT;
+  let card = null;
+  const LI = 'https://www.linkedin.com/in/saksham-rathi';
+  const openContact = (mailto) => {
+    if (!card) {
+      card = document.createElement('dialog');
+      card.className = 'reach-card';
+      card.innerHTML = '<button class="reach-card__x" type="button" data-x aria-label="Close">×</button>'
+        + '<p class="reach-card__lab">get in touch</p>'
+        + '<p class="reach-card__mail" data-addr>' + MAIL + '</p>'
+        + '<div class="reach-card__row"><button type="button" class="aqua aqua--s" data-copy>copy email</button>'
+        + '<a class="aqua aqua--blue aqua--s" data-gm target="_blank" rel="noopener">open in gmail</a></div>'
+        + '<p class="reach-card__or">or</p>'
+        + '<a class="aqua aqua--s reach-card__li" href="' + LI + '" target="_blank" rel="noopener">message me on linkedin</a>'
+        + '<a class="reach-card__app" data-app>use my mail app instead</a>';
+      document.body.append(card);
+      $('[data-x]', card).addEventListener('click', () => card.close());
+      card.addEventListener('click', (ev) => { if (ev.target === card) card.close(); });
+      const copy = $('[data-copy]', card);
+      copy.addEventListener('click', async () => {
+        let ok = false;
+        try { await navigator.clipboard.writeText(MAIL); ok = true; } catch (err) { /* fall back */ }
+        if (!ok) { const r = document.createRange(); r.selectNodeContents($('[data-addr]', card)); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); try { ok = document.execCommand('copy'); } catch (err) { /* manual */ } }
+        copy.textContent = ok ? 'copied' : 'press and hold to copy';
+        setTimeout(() => { copy.textContent = 'copy email'; }, 2200);
+      });
+    }
+    const sub = new URL(mailto).searchParams.get('subject') || 'Hello from your portfolio';
+    $('[data-gm]', card).href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + MAIL + '&su=' + encodeURIComponent(sub);
+    $('[data-app]', card).href = mailto;
+    $('[data-copy]', card).textContent = 'copy email';
+    card.showModal();
+  };
   document.addEventListener('click', (e) => {
-    const m = e.target.closest('[data-mail]'), toastEl = $('[data-toast]');
-    if (!m || !toastEl) return;
-    try { navigator.clipboard.writeText(MAIL); } catch (err) { /* no clipboard */ }
-    const sub = new URL(m.href).searchParams.get('subject') || 'Hello from your portfolio';
-    const gm = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + MAIL + '&su=' + encodeURIComponent(sub);
-    const phone = matchMedia('(pointer: coarse)').matches;
-    if (!phone) { e.preventDefault(); window.open(gm, '_blank', 'noopener'); }
-    toastEl.innerHTML = 'opened gmail. address copied too: ' + MAIL + '. <a href="' + m.href + '">use my mail app instead</a>';
-    toastEl.hidden = false; toastEl.classList.add('is-on');
-    clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('is-on'); setTimeout(() => { toastEl.hidden = true; }, 300); }, 7000);
+    const m = e.target.closest('[data-mail]');
+    if (!m) return;
+    e.preventDefault();
+    openContact(m.href);
   });
   const mail = () => {
     const a = asked();
@@ -732,7 +769,7 @@
     const btn = $('[data-stamp]', finale);
     $('[data-today]', finale).textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     btn.addEventListener('click', () => {
-      if (approved) { location.href = $('[data-mail]', finale).href; return; }
+      if (approved) { openContact($('[data-mail]', finale).href); return; }
       approved = true;
       finale.classList.add('is-stamped');
       $('[data-decision]', finale).textContent = 'Approved for interview';
