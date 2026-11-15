@@ -308,7 +308,7 @@
     }
     const wallBtns = $$('[data-wall] button', hero);
     const setWall = (w) => {
-      if (w === 'dots') hero.removeAttribute('data-wall'); else hero.dataset.wall = w;
+      hero.dataset.wall = w;
       wallBtns.forEach((b) => b.setAttribute('aria-pressed', b.dataset.w === w));
       try { localStorage.setItem('wall', w); } catch (err) { /* private window */ }
     };
@@ -516,6 +516,16 @@
   const kan = $('[data-kan]');
   let approved = false;
   const asked = () => (kan ? $$('[data-col="ask"] .kcard', kan).map((c) => c.dataset.card) : []);
+  let toastT;
+  document.addEventListener('click', (e) => {
+    const m = e.target.closest('[data-mail]'), toastEl = $('[data-toast]');
+    if (!m || !toastEl) return;
+    try { navigator.clipboard.writeText(MAIL); } catch (err) { /* no clipboard */ }
+    const gm = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + MAIL + '&su=' + encodeURIComponent(new URL(m.href).searchParams.get('subject') || 'Hello from your portfolio');
+    toastEl.innerHTML = 'address copied: ' + MAIL + '. if no mail app opens, <a href="' + gm + '" target="_blank" rel="noopener">write it in gmail</a>';
+    toastEl.hidden = false; toastEl.classList.add('is-on');
+    clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('is-on'); setTimeout(() => { toastEl.hidden = true; }, 300); }, 7000);
+  });
   const mail = () => {
     const a = asked();
     let subject = approved ? 'Approved for interview' : 'Hello from your portfolio';

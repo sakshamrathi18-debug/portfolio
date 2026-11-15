@@ -38,7 +38,7 @@
 <main id="main">
 
 <!-- ============ DESKTOP ============ -->
-<section class="hero" id="top">
+<section class="hero" id="top" data-wall="grid">
   <div class="stage" data-stage>
     <div class="stage__tilt" data-tilt>
 
@@ -65,7 +65,7 @@
         <span class="cap">linkedin-carousel.pdf</span>
       </button>
 
-      <p class="thing sticker sticker--red" data-thing style="--l:86%;--t:13%;--r:-6deg;--d:5"><span>hello<br><small>i am open to</small></span><b>internships</b></p>
+      <p class="thing sticker sticker--red" data-thing style="--l:78%;--t:15%;--r:-6deg;--d:7"><span>hello<br><small>i am open to</small></span><b>internships</b></p>
 
       <button class="thing dock" type="button" data-thing data-open="golden" style="--l:8%;--t:37%;--r:0deg;--d:2">
         <span class="dock__tile dock__tile--dark"><img src="assets/logos/golden-legand-light.svg" width="146" height="49" alt=""></span>
@@ -84,13 +84,13 @@
         <span class="cap">ubs, panjab university</span>
       </button>
 
-      <a class="thing dock" data-thing data-open="resume" href="assets/Saksham_Rathi_resume.pdf" style="--l:72%;--t:54%;--r:0deg;--d:1">
+      <a class="thing dock" data-thing data-open="resume" href="assets/Saksham_Rathi_resume.pdf" style="--l:67%;--t:63%;--r:0deg;--d:1">
         <span class="folder" aria-hidden="true"></span>
         <span class="cap">resume</span>
       </a>
       <a class="thing dock" data-thing href="#spike" style="--l:23%;--t:64%;--r:-3deg;--d:3">
-        <span class="dock__tile dock__tile--game" aria-hidden="true"><span>🍩</span></span>
-        <span class="cap">sugar-game.app</span>
+        <span class="dock__tile dock__tile--game" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="4" y="14" width="40" height="22" rx="11" fill="#fff"/><path d="M15 21v8M11 25h8" stroke="#6a3de8" stroke-width="2.6" stroke-linecap="round"/><circle cx="31" cy="22.500" r="2.200" fill="#ff4d6d"/><circle cx="36" cy="26.500" r="2.200" fill="#2bb673"/></svg></span>
+        <span class="cap">spike-game.app</span>
       </a>
       <a class="thing dock" data-thing href="#teardown" style="--l:91%;--t:31%;--r:0deg;--d:1">
         <span class="folder" aria-hidden="true"></span>
@@ -121,10 +121,9 @@
     <div class="hero__acts">
       <span><a class="aqua aqua--blue" data-mail href="mailto:sakshamrathi4@gmail.com">email me</a><small>open to summer internships</small></span>
       <span><a class="aqua" href="assets/Saksham_Rathi_resume.pdf" data-open="resume">view resume</a><small>product and marketing roles</small></span>
-      <span><a class="aqua" href="#spike">play a game</a><small>guess the sugar spike</small></span>
     </div>
     <p class="hero__hint" data-hint>psst. everything on this desk does something. drag it, click it, try the red, yellow and green dots.</p>
-    <div class="wall" data-wall role="group" aria-label="Desktop wallpaper"><span>wallpaper</span><button type="button" data-w="dots" aria-pressed="true" aria-label="Dots"></button><button type="button" data-w="grid" aria-pressed="false" aria-label="Blueprint"></button><button type="button" data-w="night" aria-pressed="false" aria-label="Night"></button></div>
+    <div class="wall" data-wall role="group" aria-label="Desktop wallpaper"><span>wallpaper</span><button type="button" data-w="grid" aria-pressed="true" aria-label="Blue"></button><button type="button" data-w="dots" aria-pressed="false" aria-label="White"></button><button type="button" data-w="night" aria-pressed="false" aria-label="Black"></button></div>
   </div>
 
   <div class="finder win" id="work">
@@ -700,5 +699,6 @@
 
 
 <script src="app.js"></script>
+<div class="toast" data-toast role="status" aria-live="polite" hidden></div>
 </body>
 </html>
