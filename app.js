@@ -521,8 +521,11 @@
     const m = e.target.closest('[data-mail]'), toastEl = $('[data-toast]');
     if (!m || !toastEl) return;
     try { navigator.clipboard.writeText(MAIL); } catch (err) { /* no clipboard */ }
-    const gm = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + MAIL + '&su=' + encodeURIComponent(new URL(m.href).searchParams.get('subject') || 'Hello from your portfolio');
-    toastEl.innerHTML = 'address copied: ' + MAIL + '. if no mail app opens, <a href="' + gm + '" target="_blank" rel="noopener">write it in gmail</a>';
+    const sub = new URL(m.href).searchParams.get('subject') || 'Hello from your portfolio';
+    const gm = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + MAIL + '&su=' + encodeURIComponent(sub);
+    const phone = matchMedia('(pointer: coarse)').matches;
+    if (!phone) { e.preventDefault(); window.open(gm, '_blank', 'noopener'); }
+    toastEl.innerHTML = 'opened gmail. address copied too: ' + MAIL + '. <a href="' + m.href + '">use my mail app instead</a>';
     toastEl.hidden = false; toastEl.classList.add('is-on');
     clearTimeout(toastT); toastT = setTimeout(() => { toastEl.classList.remove('is-on'); setTimeout(() => { toastEl.hidden = true; }, 300); }, 7000);
   });
