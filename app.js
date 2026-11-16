@@ -240,6 +240,7 @@
         };
         s.raf = requestAnimationFrame(glide);
       };
+      el.addEventListener('dragstart', (e) => e.preventDefault()); // links start a native drag that steals the pointer
       el.addEventListener('pointerup', drop);
       el.addEventListener('pointercancel', drop);
       el.addEventListener('click', (e) => { if (s.moved >= 6) { e.preventDefault(); return; } toy(el); if (el.dataset.open) { if (el.tagName === 'A' && file.showModal) e.preventDefault(); openFile(el.dataset.open, el); } });
