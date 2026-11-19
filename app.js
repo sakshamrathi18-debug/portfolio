@@ -476,30 +476,31 @@
     }), { threshold: 0.6 }).observe($('.okc__fig', okc));
   }
 
-  /* ================= marketing: reach per LinkedIn post (his own analytics, 13 Nov 2026) ================= */
+  /* ================= marketing: reach per LinkedIn post (his own analytics, 19 Nov 2026; Dunkin' row is the 13 Nov count) ================= */
   const reach = $('[data-reach]');
   if (reach) {
     const posts = [
-      ['Flipkart Minutes isn’t chasing more orders with this one. It’s chasing heavier ones.', 2837, 'brand'],
+      ['Flipkart Minutes isn’t chasing more orders with this one. It’s chasing heavier ones.', 2839, 'brand'],
       ['The only case study you need to see why Dunkin’ failed in India.', 2198, 'brand'],
-      ['A ₹3 price gap quietly stalled Britannia’s rural growth for two months.', 1509, 'brand'],
-      ['I save things on Instagram so I won’t forget them. Then I forget I saved them.', 1338, 'product'],
-      ['Flipkart just decided to go after the one habit it’s never owned: food.', 1259, 'brand'],
-      ['While quick commerce raced down to 10 minutes, FirstClub deliberately chose 30.', 1254, 'brand'],
-      ['Every brand today has funding, a celebrity and a Blinkit listing. None of that is a differentiator anymore.', 1100, 'brand'],
-      ['Netflix doesn’t call itself a family. It calls itself a sports team.', 1098, 'other'],
-      ['I built my own Kanban board app, because WhatsApp messages to myself weren’t cutting it.', 1077, 'product'],
-      ['Craving hit at 4 pm. I opened Blinkit and Amazon Now for nachos.', 1050, 'product'],
-      ['Your last UPI payment was probably for coffee, not a TV.', 1033, 'other'],
-      ['Not using AI used to get you left behind. Now using it gets you called out.', 795, 'other'],
-      ['The dark store stops at the city limits.', 683, 'brand'],
-      ['Recruiters are drowning in millions of AI-padded applications.', 662, 'other'],
-      ['My first version of this was wrong. It said poha spikes your blood sugar by 90 mg. The real number is 19.', 560, 'product'],
-      ['Fast delivery gets you an order. Is the item there when you order?', 509, 'brand'],
-      ['Cancelling Netflix takes 2 steps. Cancelling Adobe takes a YouTube tutorial.', 447, 'product'],
-      ['Instagram is testing videos up to 90 minutes long.', 434, 'product'],
-      ['Copying data between tabs. Filling the same form twice. “Can’t an AI agent just do this?”', 428, 'other'],
-      ['My ₹129 cart cost more than a ₹149 one.', 313, 'product'],
+      ['A ₹3 price gap quietly stalled Britannia’s rural growth for two months.', 1520, 'brand'],
+      ['I save things on Instagram so I won’t forget them. Then I forget I saved them.', 1343, 'product'],
+      ['While quick commerce raced down to 10 minutes, FirstClub deliberately chose 30.', 1283, 'brand'],
+      ['Flipkart just decided to go after the one habit it’s never owned: food.', 1260, 'brand'],
+      ['Every brand today has funding, a celebrity and a Blinkit listing. None of that is a differentiator anymore.', 1104, 'brand'],
+      ['Netflix doesn’t call itself a family. It calls itself a sports team.', 1102, 'other'],
+      ['I built my own Kanban board app, because WhatsApp messages to myself weren’t cutting it.', 1089, 'product'],
+      ['Craving hit at 4 pm. I opened Blinkit and Amazon Now for nachos.', 1053, 'product'],
+      ['Your last UPI payment was probably for coffee, not a TV.', 1036, 'other'],
+      ['Not using AI used to get you left behind. Now using it gets you called out.', 796, 'other'],
+      ['The dark store stops at the city limits.', 689, 'brand'],
+      ['Recruiters are drowning in millions of AI-padded applications.', 669, 'other'],
+      ['My first version of this was wrong. It said poha spikes your blood sugar by 90 mg. The real number is 19.', 625, 'product'],
+      ['Resumes are dead, so I turned mine into a website you can play with.', 585, 'product'],
+      ['Fast delivery gets you an order. Is the item there when you order?', 515, 'brand'],
+      ['Instagram is testing videos up to 90 minutes long.', 453, 'product'],
+      ['Cancelling Netflix takes 2 steps. Cancelling Adobe takes a YouTube tutorial.', 450, 'product'],
+      ['Copying data between tabs. Filling the same form twice. “Can’t an AI agent just do this?”', 430, 'other'],
+      ['My ₹129 cart cost more than a ₹149 one.', 360, 'product'],
     ];
     const list = $('.reach__list', reach), more = $('[data-more]', reach), filters = $$('[data-f]', reach);
     let f = 'all', all = false;

@@ -267,6 +267,8 @@ h1 { font-size: clamp(3.25rem, 7.2vw, 6.5rem); font-weight: 500; letter-spacing:
 .kcard__shot { display: block; width: 100%; padding: 0; margin: 0; border: 0; border-bottom: 1px solid var(--ink-1); background: #ddd; cursor: zoom-in; aspect-ratio: 16 / 10; overflow: hidden; }
 .kcard__shot img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0; transition: transform 0.5s var(--ease-out); }
 .kcard__shot:hover img { transform: scale(1.04); }
+.kcard__shot--phones { display: flex; justify-content: center; gap: 5%; padding: 7% 7% 0; background: #cfe6d5; }
+.kcard__shot--phones img { width: 27%; height: auto; flex: none; align-self: start; border-radius: 10px 10px 0 0; box-shadow: 0 6px 18px rgb(20 60 35 / 0.18); }
 .kcard__body { padding: 14px 16px 10px; }
 .kcard h4 { margin: 0; font-size: 1.125rem; font-weight: 600; letter-spacing: -0.02em; }
 .kcard p { margin-top: 4px; font-size: 0.875rem; line-height: 1.45; color: var(--ink-6); }
@@ -869,4 +871,15 @@ html:not(.js) .wdg__viz i { transform: none; opacity: 1; }
   .tear__proof figcaption { font-size: 0.6875rem; }
   .tear__panel { gap: 14px; }
   .tear__when { margin-top: 10px; }
+}
+
+/* gamla: phone screenshots in the file window stay side by side and small */
+.file__pair.file__pair--phones { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 26rem; margin-inline: auto; }
+@media (max-width: 40rem) {
+  .thing.win[data-open="desk"] { grid-column: 1 / span 2; } /* windows start their own row after the odd icon */
+}
+@media (max-width: 60rem) and (orientation: landscape) and (max-height: 32rem) {
+  /* loan steps share rows so headings, bubbles and text line up across columns */
+  .flow__panels { grid-template-rows: repeat(4, auto); gap: 0 12px; }
+  .flow__panels > li { grid-row: span 4; grid-template-rows: subgrid; row-gap: 0; align-content: start; }
 }

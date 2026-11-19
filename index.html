@@ -96,6 +96,10 @@
         <span class="folder" aria-hidden="true"></span>
         <span class="cap">teardowns</span>
       </a>
+      <button class="thing dock" type="button" data-thing data-open="gamla" style="--l:86%;--t:73%;--r:0deg;--d:2">
+        <span class="dock__tile"><img src="assets/logos/gamla.png" width="160" height="160" alt=""></span>
+        <span class="cap">gamla.app</span>
+      </button>
       <a class="thing dock thing--m" href="https://www.linkedin.com/in/saksham-rathi" target="_blank" rel="noopener" style="--r:0deg;--d:1">
         <span class="dock__tile dock__tile--li" aria-hidden="true">in</span>
         <span class="cap">linkedin</span>
@@ -179,19 +183,19 @@
       <div class="flow__body">
         <ol class="flow__panels">
           <li class="is-active">
-            <p class="bubble">step 1. is this pan really yours?</p>
-            <h3>pan verification</h3>
-            <p>i tested third-party api vendors in sandbox before the team picked one.</p>
+            <p class="bubble">step 1. am i eligible? answer in 30 seconds</p>
+            <h3>eligibility check</h3>
+            <p>pan and work details, then a soft bureau pull that leaves the credit score alone. i tested third-party api vendors in sandbox before the team picked one.</p>
           </li>
           <li>
-            <p class="bubble">step 2. kyc, without visiting a branch</p>
-            <h3>kyc on the phone</h3>
-            <p>one of 10+ PRDs i wrote, each cleared with risk and compliance for RBI rules.</p>
+            <p class="bubble">step 2. a no that isn’t a dead end</p>
+            <h3>rejections and thin files</h3>
+            <p>a rejected applicant sees the reason, a fix-it plan and a reapply date. first-time borrowers can share bank statements through account aggregator instead.</p>
           </li>
           <li>
-            <p class="bubble">step 3. here is your offer</p>
+            <p class="bubble">step 3. pick the amount, see every rupee</p>
             <h3>the loan offer</h3>
-            <p>shaped by loan journeys i mapped in person at 5 branches.</p>
+            <p>amount, tenure and daily, weekly or monthly emi, with the fee and gst shown upfront. shaped by loan journeys i mapped in person at 5 branches.</p>
             <ul class="flow__logos">
               <li><img src="assets/logos/iifl-finance.svg" width="238" height="45" alt="IIFL Finance"></li>
               <li><img src="assets/logos/muthoot.png" width="272" height="86" alt="Muthoot Finance"></li>
@@ -199,18 +203,18 @@
             </ul>
           </li>
           <li>
-            <p class="bubble">step 4. every charge, on one page</p>
-            <h3>key fact statement</h3>
-            <p>fixing the drop-off points lifted approval conversion.</p>
+            <p class="bubble">step 4. kyc, without visiting a branch</p>
+            <h3>kyc on the phone</h3>
+            <p>aadhaar otp, a selfie matched to the aadhaar photo, and a bank account in the same name. one of 10+ PRDs i wrote, each cleared with risk and compliance for RBI rules.</p>
+          </li>
+          <li>
+            <p class="bubble">step 5. sign once, repay on autopay</p>
+            <h3>kfs, e-sign and e-nach</h3>
+            <p>sanction letter, aadhaar e-sign, a key fact statement with the all-in apr and 3-day cooling-off, then an e-nach mandate. fixing the drop-off points lifted approval conversion.</p>
             <div class="meter" aria-label="Approval conversion went from 65% to 78%">
               <span class="meter__row"><i style="--w:0.65"></i><b class="fig">65%</b></span>
               <span class="meter__row meter__row--hot"><i style="--w:0.78"></i><b class="fig">78%</b></span>
             </div>
-          </li>
-          <li>
-            <p class="bubble">step 5. repayments set up, done</p>
-            <h3>enach mandate</h3>
-            <p>repayment and renewal run across 10+ schemes without a branch visit.</p>
           </li>
         </ol>
 
@@ -219,13 +223,13 @@
             <div class="win__bar"><i></i><i></i><i></i><span>personal-loan-application.pdf</span><b>x</b></div>
             <div class="flow__pad">
               <ul class="flow__lines">
-                <li><span>pan checked against the name</span><b class="fig">done</b></li>
-                <li><span>kyc finished on the phone</span><b class="fig">done</b></li>
-                <li><span>offer shown: amount, rate, tenure</span><b class="fig">done</b></li>
-                <li><span>every charge on one page</span><b class="fig">signed</b></li>
-                <li><span>repayment mandate set up</span><b class="fig">active</b></li>
+                <li><span>soft bureau pull, limit shown</span><b class="fig">eligible</b></li>
+                <li><span>no credit history? account aggregator</span><b class="fig">fallback</b></li>
+                <li><span>amount, tenure, emi, every fee</span><b class="fig">picked</b></li>
+                <li><span>aadhaar otp, selfie, bank name match</span><b class="fig">verified</b></li>
+                <li><span>sanction, e-sign, kfs, e-nach</span><b class="fig">signed</b></li>
               </ul>
-              <p class="flow__result"><span class="stamp">disbursed</span><span class="flow__sum">the vertical went live and has disbursed <b>₹30 Cr</b>.</span></p>
+              <p class="flow__result"><span class="stamp">disbursed</span><span class="flow__sum">the vertical went live and has disbursed <b>₹30 Cr</b>. repayment and renewal run across 10+ schemes.</span></p>
             </div>
           </div>
         </div>
@@ -233,11 +237,11 @@
 
       <div class="rail" role="group" aria-label="Loan steps">
         <i class="rail__fill" aria-hidden="true"></i>
-        <button type="button" data-step="0">pan</button>
-        <button type="button" data-step="1">kyc</button>
+        <button type="button" data-step="0">eligibility</button>
+        <button type="button" data-step="1">fallback</button>
         <button type="button" data-step="2">offer</button>
-        <button type="button" data-step="3">kfs</button>
-        <button type="button" data-step="4">enach</button>
+        <button type="button" data-step="3">kyc</button>
+        <button type="button" data-step="4">e-sign</button>
         <button type="button" data-step="5">disbursed</button>
       </div>
     </div>
@@ -311,9 +315,9 @@
 
   <div class="wrap">
     <dl class="mkt__stats" data-rise>
-      <div class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><dt data-up="20">20</dt><dd>posts in about three months</dd></div>
-      <div class="win"><span class="win__bar win__bar--blue"><i></i><i></i><i></i><b>x</b></span><dt data-up="20600">20,600</dt><dd>views, with no ad spend</dd></div>
-      <div class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><dt data-up="1584">1,584</dt><dd>followers</dd></div>
+      <div class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><dt data-up="21">21</dt><dd>posts in about three months</dd></div>
+      <div class="win"><span class="win__bar win__bar--blue"><i></i><i></i><i></i><b>x</b></span><dt data-up="21400">21,400</dt><dd>views, with no ad spend</dd></div>
+      <div class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><dt data-up="1609">1,609</dt><dd>followers</dd></div>
     </dl>
 
     <div class="reach" data-reach>
@@ -323,16 +327,16 @@
           <button type="button" aria-pressed="false" data-f="brand">brands</button>
           <button type="button" aria-pressed="false" data-f="product">product</button>
         </div>
-        <p class="note">my opening lines and linkedin’s own view counts, read on 13 november 2026.</p>
+        <p class="note">my opening lines and linkedin’s own view counts, read on 19 november 2026.</p>
       </div>
       <p class="swipe-hint">swipe for more →</p>
       <ol class="reach__list" data-rise>
-        <li class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><span class="reach__hook">Flipkart Minutes isn’t chasing more orders with this one. It’s chasing heavier ones.</span><span class="reach__bar"><i style="--w:1"></i></span><b class="fig">2,837 views</b></li>
+        <li class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><span class="reach__hook">Flipkart Minutes isn’t chasing more orders with this one. It’s chasing heavier ones.</span><span class="reach__bar"><i style="--w:1"></i></span><b class="fig">2,839 views</b></li>
         <li class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><span class="reach__hook">The only case study you need to see why Dunkin’ failed in India.</span><span class="reach__bar"><i style="--w:0.77"></i></span><b class="fig">2,198 views</b></li>
-        <li class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><span class="reach__hook">A ₹3 price gap quietly stalled Britannia’s rural growth for two months.</span><span class="reach__bar"><i style="--w:0.53"></i></span><b class="fig">1,509 views</b></li>
+        <li class="win"><span class="win__bar"><i></i><i></i><i></i><b>x</b></span><span class="reach__hook">A ₹3 price gap quietly stalled Britannia’s rural growth for two months.</span><span class="reach__bar"><i style="--w:0.54"></i></span><b class="fig">1,520 views</b></li>
       </ol>
       <div class="reach__foot">
-        <button class="aqua aqua--s" type="button" data-more hidden>show all 20</button>
+        <button class="aqua aqua--s" type="button" data-more hidden>show all 21</button>
         <a class="link" href="https://www.linkedin.com/in/saksham-rathi/recent-activity/all/" target="_blank" rel="noopener">see the posts on linkedin</a>
       </div>
     </div>
@@ -357,6 +361,13 @@
       <div class="kan__col kan__col--wide" data-col="shipped">
         <h3><span class="folder folder--s" aria-hidden="true"></span>shipped</h3>
         <ul class="kan__list">
+          <li class="kcard win" data-card="Gamla" data-rise>
+            <span class="win__bar"><i></i><i></i><i></i><span>gamla.url</span><b>x</b></span>
+            <button class="kcard__shot kcard__shot--phones" type="button" data-open="gamla" aria-label="Open the Gamla screenshots"><img src="assets/screens/gamla-today.jpg" width="600" height="1300" alt="" loading="lazy"><img src="assets/screens/gamla-discover.jpg" width="600" height="1300" alt="" loading="lazy"><img src="assets/screens/gamla-plant.jpg" width="600" height="1300" alt="" loading="lazy"></button>
+            <div class="kcard__body"><h4>gamla</h4>
+            <p>a plant care app for indian homes. tells you when to check the soil, one reminder a day, in english or hindi.</p>
+            <div class="kcard__acts"><a href="https://gamla.vercel.app" target="_blank" rel="noopener">open the live site</a><button type="button" data-ask>Ask about this</button></div></div>
+          </li>
           <li class="kcard win" data-card="Spike Book" data-rise>
             <span class="win__bar"><i></i><i></i><i></i><span>spike-book.url</span><b>x</b></span>
             <button class="kcard__shot" type="button" data-open="spike" aria-label="Open the Spike Book chart"><img src="assets/screens/spikebook.png" width="1440" height="900" alt="Spike Book home screen" loading="lazy"></button>
@@ -694,6 +705,16 @@
   <p class="file__role">An old Galaxy phone turned into an always-on desk clock: time, weather, today’s three priorities and the next class, fed by a Google Sheet.</p>
   <figure class="file__shot"><img src="assets/screens/desk.png" width="1440" height="900" alt="Desk Dashboard showing the time, weather, three priorities and the next class"></figure>
   <a class="btn btn--ink" href="https://desk-dashboard-silk.vercel.app" target="_blank" rel="noopener">Open the live site</a>
+</template>
+
+<template id="f-gamla">
+  <h2 id="file-title">Gamla</h2>
+  <p class="file__role">A plant care app for Indian homes. It says when to check each plant’s soil and sends one reminder a day, in English or Hindi. Free, no account, installs from the browser.</p>
+  <div class="file__pair file__pair--even file__pair--phones">
+    <figure><img src="assets/screens/gamla-today.jpg" width="600" height="1300" alt="Gamla Today screen: each plant asks for a soil check, with buttons for dry and still damp"><figcaption>Today: one soil check per plant</figcaption></figure>
+    <figure><img src="assets/screens/gamla-plant.jpg" width="600" height="1300" alt="Gamla plant page for peace lily: water, light, place and pet safety"><figcaption>Each plant’s needs at a glance</figcaption></figure>
+  </div>
+  <a class="btn btn--ink" href="https://gamla.vercel.app" target="_blank" rel="noopener">Open the live site</a>
 </template>
 
 <template id="f-graveyard">
